@@ -1,7 +1,16 @@
+""" Adapter pattern
+インターフェースと実装済みのクラスのズレを埋めるようなデザインパターン。
+すでに実装済みのクラスを継承し、インターフェースのメソッドから呼び出すことで、
+使う側はインターフェース以外の情報を知る必要がなくなる。
+"""
+
 from abc import ABC, abstractmethod
 
 
 class Banner(object):
+    """ Target is connected to the interface
+    """
+
     def __init__(self, string: str):
         self.string = string
 
@@ -13,6 +22,8 @@ class Banner(object):
 
 
 class Print(ABC):
+    """ Interface
+    """
     @abstractmethod
     def print_weak(self) -> None:
         raise NotImplementedError
@@ -23,6 +34,9 @@ class Print(ABC):
 
 
 class PrintBanner(Banner, Print):
+    """ Adapter Class
+    """
+
     def __init__(self, string: str):
         super().__init__(string)
 

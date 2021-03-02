@@ -1,30 +1,34 @@
+""" Iterator Pattern
+数え上げを行うインターフェースを作成することで、数える対象の実装とイテレートの実装を
+分離する。
+"""
 from abc import ABC, abstractmethod
 
 
 class Iterator(ABC):
     @abstractmethod
     def has_next(self) -> bool:
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def next(self) -> object:
-        pass
+        raise NotImplementedError
 
 
 class ReverseIterator(ABC):
     @abstractmethod
     def has_previous(self) -> bool:
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def previous(self) -> object:
-        pass
+        raise NotImplementedError
 
 
 class Aggregate(ABC):
     @abstractmethod
     def iterator(self) -> Iterator:
-        pass
+        raise NotImplementedError
 
 
 class Book(object):
