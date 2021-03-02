@@ -68,6 +68,8 @@ class BookShelfIterator(Iterator):
             return False
 
     def next(self) -> object:
+        """ Get current book and move to next
+        """
         book: Book = self.book_shelf.get_book_at(self.index)
         self.index += 1
         return book
@@ -85,6 +87,8 @@ class BookShelfReverseIterator(ReverseIterator):
             return False
 
     def previous(self) -> object:
+        """ Get current book and move to previous
+        """
         book: Book = self.book_shelf.get_book_at(self.index)
         self.index -= 1
         return book
