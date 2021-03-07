@@ -4,7 +4,7 @@
 使う側はインターフェース以外の情報を知る必要がなくなる。
 """
 
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 
 class Banner(object):
