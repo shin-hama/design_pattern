@@ -1,10 +1,12 @@
 """ Template Method Pattern
 
-大まかな処理の流れを基底クラスで共通化し、詳細な処理をサブクラス上で実装する
-
+大まかな処理の流れを基底クラスで共通化し、詳細な処理をサブクラス上で実装する。
+似たような処理を行う異なるクラスを複数作る必要がなくなり、メンテナンスも楽になる。
+しかし、基底クラスとサブクラスの結合度は高くなってしまう。
 """
 
 from abc import ABC, abstractmethod
+from typing import final
 from unicodedata import east_asian_width
 
 
@@ -21,7 +23,10 @@ class AbstractDisplay(ABC):
     def print(self):
         raise NotImplementedError
 
+    @final
     def display(self):
+        """ Prohibits override
+        """
         self.open()
 
         for i in range(0, 5):
@@ -31,7 +36,12 @@ class AbstractDisplay(ABC):
 
 
 class CharDisplay(AbstractDisplay):
+    """ Display a charactor between << and >>
+    """
+
     def __init__(self, c: str):
+        if len(c) != 1:
+            raise AttributeError
         self.c: str = c
 
     def open(self):
@@ -45,6 +55,9 @@ class CharDisplay(AbstractDisplay):
 
 
 class StringDisplay(AbstractDisplay):
+    """ Display string that is framed by line.
+    """
+
     def __init__(self, string: str):
         self.string = string
         self.width = 0
