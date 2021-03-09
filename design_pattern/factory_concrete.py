@@ -6,26 +6,35 @@ from factory_framework import Product, Factory
 
 
 class IDCard(Product):
-    def __init__(self, owner: str):
-        print(f"We will create {owner}'s card.")
+    def __init__(self, owner: str, serial: int):
+        print(f"We will create {owner}'s({serial}) card.")
         self.owner = owner
+        self.serial = serial
 
     def use(self) -> None:
-        print(f"Use the card of {self.owner}")
+        print(f"Use the card of {self.owner}({self.serial})")
 
     def get_owner(self) -> str:
         return self.owner
+
+    def get_serial(self) -> int:
+        return self.serial
 
 
 class IDCardFactory(Factory):
     def __init__(self):
         self.owners = []
+        self.serial = 0
 
     def create_product(self, owner: str) -> Product:
-        return IDCard(owner)
+        self.serial += 1
+        return IDCard(owner, self.serial)
 
     def register_product(self, product: IDCard) -> None:
-        self.owners.append(product.get_owner())
+        self.owners.append({
+            "owner": product.get_owner(),
+            "serial": product.get_serial()
+        })
 
     def get_owners(self) -> list:
         return self.owners
@@ -39,3 +48,5 @@ if __name__ == "__main__":
     card1.use()
     card2.use()
     card3.use()
+
+    print(factory.owners)
