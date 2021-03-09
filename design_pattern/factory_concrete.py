@@ -1,3 +1,7 @@
+""" Factory Method Pattern
+
+サブクラスの実装例、インスタンス化の具体的な処理を記載
+"""
 from factory_framework import Product, Factory
 
 
@@ -20,7 +24,7 @@ class IDCardFactory(Factory):
     def create_product(self, owner: str) -> Product:
         return IDCard(owner)
 
-    def register_product(self, product: IDCard):
+    def register_product(self, product: IDCard) -> None:
         self.owners.append(product.get_owner())
 
     def get_owners(self) -> list:
