@@ -1,3 +1,4 @@
+from __future__ import annotations
 from abc import ABC, abstractmethod
 
 
@@ -38,12 +39,26 @@ class Page(ABC):
         try:
             filename = f"{self.title}.html"
             with open(filename, mode="w", encoding="utf-8") as f:
-                f.writelines(self.make_html())
+                f.write(self.make_html())
 
             print(f"Has created {filename}")
         except Exception as e:
             raise e
 
     @abstractmethod
-    def make_html(self) -> list:
+    def make_html(self) -> str:
+        pass
+
+
+class Factory(ABC):
+    @abstractmethod
+    def create_link(self, caption: str, url: str) -> Link:
+        pass
+
+    @abstractmethod
+    def create_tray(self, caption: str) -> Tray:
+        pass
+
+    @abstractmethod
+    def create_page(self, title: str, author: str) -> Page:
         pass

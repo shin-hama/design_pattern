@@ -24,7 +24,7 @@ class Factory(ABC):
         return product
 
     @abstractmethod
-    def create_product(self) -> Product:
+    def create_product(self, owner: str) -> Product:
         raise NotImplementedError
 
     @abstractmethod
