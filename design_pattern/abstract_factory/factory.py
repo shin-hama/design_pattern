@@ -1,3 +1,6 @@
+""" Implemented Abstract Factory
+抽象クラスの実装、抽象クラスにのみ依存する
+"""
 from abstract_factory import Factory, Item, Link, Page, Tray
 
 

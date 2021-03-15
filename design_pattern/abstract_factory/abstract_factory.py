@@ -1,3 +1,8 @@
+""" Abstract Factory
+インターフェース、抽象Factoryクラス内で抽象クラスの生成を定義する
+このモジュール内で必要なインターフェースをすべて定義することで、呼び出し側は実装に
+依存することなく処理を実行できる
+"""
 from __future__ import annotations
 from abc import ABC, abstractmethod
 
