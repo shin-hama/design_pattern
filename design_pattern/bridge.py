@@ -10,6 +10,8 @@ from typing import final
 
 
 class DisplayImpl(ABC):
+    """ Abstract implementer
+    """
     @abstractmethod
     def raw_open(self):
         pass
@@ -41,6 +43,9 @@ class StringDisplay(DisplayImpl):
 
 
 class Display(object):
+    """ Abstract abstraction
+    """
+
     def __init__(self, impl: DisplayImpl):
         self.impl = impl
 
@@ -62,6 +67,8 @@ class Display(object):
 
 class CountDisplay(Display):
     def multi_display(self, times: int) -> None:
+        """ Add different process flow
+        """
         self.open()
         for i in range(times):
             self.print()
