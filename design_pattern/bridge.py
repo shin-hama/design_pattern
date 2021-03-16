@@ -39,7 +39,24 @@ class StringDisplay(DisplayImpl):
         self.print_line()
 
     def print_line(self):
-        print("-"*10)
+        print("-" * 10)
+
+
+class CharDisplay(DisplayImpl):
+    def __init__(self, char: str):
+        self.char = char[0]
+        self.buf: list = []
+
+    def raw_open(self):
+        self.buf.append("<")
+
+    def raw_print(self):
+        self.buf.append(self.char)
+
+    def raw_close(self):
+        self.buf.append(">")
+        print("".join(self.buf))
+        self.buf = []
 
 
 class Display(object):
@@ -70,12 +87,23 @@ class CountDisplay(Display):
         """ Add different process flow
         """
         self.open()
-        for i in range(times):
+        for i in range(0, times):
             self.print()
         self.close()
 
 
+class IteratorDisplay(CountDisplay):
+    def __init__(self, impl: DisplayImpl, steps: int):
+        self.steps = steps
+        super().__init__(impl)
+
+    def iterate_display(self, times: int) -> None:
+        count = 0
+        for i in range(0, times):
+            self.multi_display(count)
+            count += self.steps
+
+
 if __name__ == "__main__":
-    d = CountDisplay(StringDisplay("test"))
-    d.display()
-    d.multi_display(5)
+    d = IteratorDisplay(CharDisplay("test"), 2)
+    d.iterate_display(6)
