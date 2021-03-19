@@ -1,4 +1,6 @@
 """ Strategy Pattern
+振る舞いの詳細を別クラスに委譲することで、結合度を低くする。
+委譲先のインターフェースにのみ依存することで、ふるまいの詳細を容易に変更可能になる
 """
 from __future__ import annotations
 from abc import ABC, abstractmethod
@@ -23,9 +25,13 @@ class Hand(object):
         return cls(handvalue)
 
     def is_stronger_than(self, h: Hand) -> bool:
+        """ Return true if stronger than inputted hand
+        """
         return self.fight(h) == 1
 
     def is_weaker_than(self, h: Hand) -> bool:
+        """ Return true if weaker than inputted hand
+        """
         return self.fight(h) == -1
 
     def fight(self, h: Hand):
