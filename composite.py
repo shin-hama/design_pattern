@@ -1,4 +1,7 @@
 """ Composite Pattern
+入れ子構造の物体を扱うパターン。入れ子となる容器とその中身を同一オブジェクトと
+みなしている。オブジェクト内に自身と同じ形式のインスタンスを保存することで、再帰的に
+入れ子構造を呼び出すことが可能
 """
 from __future__ import annotations
 from abc import ABC, abstractmethod
