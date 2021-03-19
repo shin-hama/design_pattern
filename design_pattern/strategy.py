@@ -23,10 +23,10 @@ class Hand(object):
         return cls(handvalue)
 
     def is_stronger_than(self, h: Hand) -> bool:
-        return self.fight(h)
+        return self.fight(h) == 1
 
     def is_weaker_than(self, h: Hand) -> bool:
-        return self.fight(h)
+        return self.fight(h) == -1
 
     def fight(self, h: Hand):
         if self.handvalue == h.handvalue:
@@ -99,3 +99,54 @@ class ProbStrategy(Strategy):
         else:
             self.history[self.prev_hand][(self.current_hand + 1) % 3] += 1
             self.history[self.prev_hand][(self.current_hand + 2) % 3] += 1
+
+
+class Player(object):
+    def __init__(self, name: str, strategy: Strategy):
+        self.name = name
+        self.strategy = strategy
+        self.wincount = 0
+        self.losecount = 0
+        self.gamecount = 0
+
+    def next_hand(self) -> Hand:
+        return self.strategy.next_hand()
+
+    def win(self) -> None:
+        self.wincount += 1
+        self.gamecount += 1
+
+    def lose(self) -> None:
+        self.losecount += 1
+        self.gamecount += 1
+
+    def even(self) -> None:
+        self.gamecount += 1
+
+    def __str__(self):
+        return (
+            f"{self.name}:{self.gamecount} games, {self.wincount} win, "
+            f"{self.losecount} lose."
+        )
+
+
+if __name__ == "__main__":
+    p1 = Player("taro", WinningStrategy())
+    p2 = Player("jiro", ProbStrategy())
+
+    for _ in range(10000):
+        hand1 = p1.next_hand()
+        hand2 = p2.next_hand()
+        if hand1.is_stronger_than(hand2):
+            p1.win()
+            p2.lose()
+        elif hand1.is_weaker_than(hand2):
+            p1.lose()
+            p2.win()
+        else:
+            p1.even()
+            p2.even()
+
+    print("result")
+    print(p1)
+    print(p2)
