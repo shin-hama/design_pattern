@@ -1,4 +1,6 @@
 """ Decorator Pattern
+ベースとなる機能を継承する形で次々に機能を付け加える（装飾する）
+同じインターフェースを実装することで、各機能をすべて同じものであるとみなせる
 """
 from abc import ABC, abstractmethod
 from typing import final, Union
@@ -41,6 +43,29 @@ class StringDisplay(Display):
             return self.string
         else:
             return None
+
+
+class MultiStringDisplay(Display):
+    def __init__(self):
+        """ string must not include \n
+        """
+        self.strings = []
+
+    def get_columns(self) -> int:
+        return max([len(string) for string in self.strings])
+
+    def get_rows(self) -> int:
+        return len(self.strings)
+
+    def get_row_text(self, row: int) -> Union[None, str]:
+        if row < len(self.strings):
+            empty_len = self.get_columns() - len(self.strings[row])
+            return f"{self.strings[row]}{' '*empty_len}"
+        else:
+            return None
+
+    def add(self, string: str) -> None:
+        self.strings.append(string)
 
 
 class Boader(Display):
@@ -98,8 +123,30 @@ class FullBoader(Boader):
         return char * count
 
 
+class UpDownBoader(Boader):
+    def __init__(self, display: Display, char: str):
+        super().__init__(display)
+        self.boader_char = char
+
+    def get_columns(self) -> int:
+        return self.display.get_columns()
+
+    def get_rows(self) -> int:
+        return 1 + self.display.get_rows() + 1
+
+    def get_row_text(self, row: int) -> Union[None, str]:
+        if row == 0 or row == (self.display.get_rows() + 1):
+            return f"{self.boader_char * self.get_columns()}"
+        else:
+            return self.display.get_row_text(row - 1)
+
+
 if __name__ == "__main__":
     b1 = StringDisplay("Hello World")
+    ms = MultiStringDisplay()
+    ms.add("Hello")
+    ms.add("Good Morning")
+    ms.add("Good Night")
     b2 = SideBoader(b1, "#")
     b3 = FullBoader(b2)
     b1.show()
@@ -108,15 +155,17 @@ if __name__ == "__main__":
 
     b4 = SideBoader(
         FullBoader(
-            FullBoader(
+            UpDownBoader(
                 FullBoader(
                     SideBoader(
-                        FullBoader(
-                            StringDisplay("Hello!")
+                        UpDownBoader(
+                            ms,
+                            "/"
                         ),
                         "*"
                     )
-                )
+                ),
+                "="
             )
         ),
         "#"
