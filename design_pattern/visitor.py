@@ -29,6 +29,23 @@ class ListVisitor(Visitor):
             self.current_dir = backup
 
 
+class FileFindVisitor(Visitor):
+    def __init__(self, suffix: str):
+        self.suffix = suffix
+        self.found_file: list[File] = []
+
+    def visit(self, entry: Union[Directory, File]) -> None:
+        if isinstance(entry, File) and entry.get_name().endswith(self.suffix):
+            self.found_file.append(entry)
+
+        if isinstance(entry, Directory):
+            for e in entry.directory:
+                e.accept(self)
+
+    def get_found_file(self):
+        return self.found_file
+
+
 class Element(ABC):
     @abstractmethod
     def accept(self, visitor: Visitor) -> None:
@@ -98,7 +115,21 @@ if __name__ == "__main__":
     rootdir.add(bindir)
     rootdir.add(tmpdir)
     rootdir.add(usrdir)
-    bindir.add(File("vi", 10000))
-    bindir.add(File("latex", 20000))
+    bindir.add(File("vi.md", 10000))
+    bindir.add(File("latex.tx", 20000))
 
-    rootdir.accept(ListVisitor())
+    foo = Directory("foo")
+    bar = Directory("bar")
+    usrdir.add(foo)
+    usrdir.add(bar)
+
+    foo.add(File("index.html", 200))
+    foo.add(File("memo.txt", 250))
+    bar.add(File("sample.html", 500))
+    foo.add(File("readme.txt", 50))
+
+    ffv = FileFindVisitor(".html")
+    rootdir.accept(ffv)
+
+    for f in ffv.get_found_file():
+        print(f)
