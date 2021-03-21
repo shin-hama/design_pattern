@@ -46,6 +46,22 @@ class FileFindVisitor(Visitor):
         return self.found_file
 
 
+class SizeVisitor(Visitor):
+    def __init__(self):
+        self.size = 0
+
+    def get_size(self) -> int:
+        return self.size
+
+    def visit(self, entry: Union[Directory, File]) -> None:
+        if isinstance(entry, File):
+            self.size += entry.get_size()
+
+        if isinstance(entry, Directory):
+            for d in entry.directory:
+                d.accept(self)
+
+
 class Element(ABC):
     @abstractmethod
     def accept(self, visitor: Visitor) -> None:
@@ -92,11 +108,9 @@ class Directory(Entry):
         return self.name
 
     def get_size(self) -> int:
-        size = 0
-        for d in self.directory:
-            size += d.get_size()
-
-        return size
+        sv = SizeVisitor()
+        self.accept(sv)
+        return sv.get_size()
 
     def add(self, entry: Entry) -> Entry:
         self.directory.append(entry)
@@ -128,8 +142,5 @@ if __name__ == "__main__":
     bar.add(File("sample.html", 500))
     foo.add(File("readme.txt", 50))
 
-    ffv = FileFindVisitor(".html")
+    ffv = ListVisitor()
     rootdir.accept(ffv)
-
-    for f in ffv.get_found_file():
-        print(f)
